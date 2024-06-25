@@ -73,7 +73,7 @@ class UserCreate(BaseModel):
     data_limit_reset_strategy: Optional[str] = "no_reset"
     enabled: Optional[bool] = True
     status: Optional[str] = 'active'
-    services: Optional[List[int]] = []
+    service_ids: Optional[List[int]] = []
     note: Optional[str] = None
     on_hold_expire_duration: Optional[int] = 0
     on_hold_timeout: Optional[datetime] = None
@@ -85,7 +85,7 @@ class UserModify(BaseModel):
     data_limit_reset_strategy: Optional[str] = "no_reset"
     enabled: Optional[bool] = True
     status: Optional[str] = 'active'
-    services: Optional[List[int]] = []
+    service_ids: Optional[List[int]] = []
     note: Optional[str] = None
     on_hold_expire_duration: Optional[int] = 0
     on_hold_timeout: Optional[datetime] = None
