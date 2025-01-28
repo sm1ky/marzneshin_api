@@ -1,4 +1,4 @@
-import httpx
+import httpx, time, base64, json
 from typing import Optional, List, Any, Dict
 from .models import AdminCreate, AdminModify, NodeCreate, NodeModify, ServiceCreate, ServiceModify, InboundHost, UserCreate, UserModify
 
@@ -23,8 +23,29 @@ class MarzneshinAPI:
             self.token = data['access_token']
             self.headers['Authorization'] = f'Bearer {self.token}'
 
-    async def _request(self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None, params: Optional[Dict[str, Any]] = None):
+    def _is_token_expired(self) -> bool:
         if not self.token:
+            return True
+
+        token_parts = self.token.split('.')
+        if len(token_parts) != 3:
+            return True
+        payload = token_parts[1]
+        payload += '=' * (-len(payload) % 4)
+
+        try:
+            decoded_bytes = base64.urlsafe_b64decode(payload)
+            payload = json.loads(decoded_bytes)
+        except Exception:
+            return True
+
+        exp_timestamp = payload.get('exp')
+        if not exp_timestamp:
+            return True
+        return int(time.time()) > exp_timestamp
+
+    async def _request(self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None, params: Optional[Dict[str, Any]] = None):
+        if self._is_token_expired():
             await self._get_token()
 
         url = f'{self.base_url}{endpoint}'

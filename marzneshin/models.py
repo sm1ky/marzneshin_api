@@ -67,28 +67,36 @@ class InboundHost(BaseModel):
 
 # User Models
 class UserCreate(BaseModel):
+    id: Optional[int] = None
     username: str
-    expire: Optional[datetime] = None
+    expire_strategy: str
+    expire_date: Optional[str] = None
+    usage_duration: Optional[int] = None
+    activation_deadline: Optional[str] = None
+    key: Optional[str] = None
     data_limit: Optional[int] = 0
     data_limit_reset_strategy: Optional[str] = "no_reset"
-    enabled: Optional[bool] = True
-    status: Optional[str] = 'active'
-    service_ids: Optional[List[int]] = []
     note: Optional[str] = None
-    on_hold_expire_duration: Optional[int] = 0
-    on_hold_timeout: Optional[datetime] = None
+    sub_updated_at: Optional[str] = None
+    sub_last_user_agent: Optional[str] = None
+    online_at: Optional[str] = None
+    service_ids: Optional[List[int]] = []
 
 class UserModify(BaseModel):
+    id: Optional[int] = None
     username: str
-    expire: Optional[datetime] = None
+    expire_strategy: Optional[str] = None
+    expire_date: Optional[str] = None
+    usage_duration: Optional[int] = None
+    activation_deadline: Optional[str] = None
+    key: Optional[str] = None
     data_limit: Optional[int] = 0
     data_limit_reset_strategy: Optional[str] = "no_reset"
-    enabled: Optional[bool] = True
-    status: Optional[str] = 'active'
-    service_ids: Optional[List[int]] = []
     note: Optional[str] = None
-    on_hold_expire_duration: Optional[int] = 0
-    on_hold_timeout: Optional[datetime] = None
+    sub_updated_at: Optional[str] = None
+    sub_last_user_agent: Optional[str] = None
+    online_at: Optional[str] = None
+    service_ids: Optional[List[int]] = []
 
 # Subscription Models
 class Subscription(BaseModel):
