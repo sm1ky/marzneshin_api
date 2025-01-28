@@ -1,7 +1,7 @@
 import asyncio
 from marzneshin.api import MarzneshinAPI
 from marzneshin.models import UserCreate, UserModify
-from datetime import datetime
+from datetime import datetime, timedelta
 
 async def main():
     base_url = 'http://127.0.0.1:3500'
@@ -17,10 +17,13 @@ async def main():
     # Добавление нового пользователя
     new_user_data = UserCreate(
         username='newuser',
+        expire_strategy="fixed_date",
+        expire_date=(datetime.now() + timedelta(days=3)).isoformat(),
         data_limit=1073741824,  # 1GB
         enabled=True,
-        status='active',
-        services=[1, 2]
+        data_limit_reset_strategy="month",
+        note="Test note",
+        service_ids=[1, 3]
     )
     new_user = await api.add_user(new_user_data)
     print("New User:", new_user)
@@ -32,7 +35,7 @@ async def main():
     # Изменение данных пользователя
     modified_user_data = UserModify(
         username='newuser',
-        services=[
+        service_ids=[
             2
         ]
     )
